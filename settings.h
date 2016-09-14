@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <libconfig.h>
 
+// configuration file path
+const char* configFilePath;
+
 // my address 
 const char* addr;
 
