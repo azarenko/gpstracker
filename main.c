@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
     }
     
     
-    
  exit:
     syslog(LOG_INFO, "Stoping.");
     closelog();    

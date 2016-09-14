@@ -3,8 +3,7 @@
 int readSettings(const char* configFilePath)
 {
     config_t cfg;
-    config_setting_t *setting;
-    const char *str;
+    config_setting_t *setting;    
 
     config_init(&cfg);
   
@@ -15,6 +14,132 @@ int readSettings(const char* configFilePath)
                 config_error_line(&cfg), config_error_text(&cfg));
         config_destroy(&cfg);
         return(EXIT_FAILURE);
+    }
+    
+    if(!config_lookup_string(&cfg, "addr", &addr))        
+    {
+        fprintf(stderr, "No 'addr' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "port", &port))        
+    {
+        fprintf(stderr, "No 'port' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "debug", &debug))        
+    {
+        fprintf(stderr, "No 'debug' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "waitinactive", &waitinactive))        
+    {
+        fprintf(stderr, "No 'waitinactive' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "oftentime", &oftentime))        
+    {
+        fprintf(stderr, "No 'oftentime' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "betweentimeout", &betweentimeout))        
+    {
+        fprintf(stderr, "No 'betweentimeout' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_string(&cfg, "primarypglogin", &primarypglogin))        
+    {
+        fprintf(stderr, "No 'primarypglogin' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_string(&cfg, "primarypgpwd", &primarypgpwd))        
+    {
+        fprintf(stderr, "No 'primarypgpwd' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_string(&cfg, "primarypghost", &primarypghost))        
+    {
+        fprintf(stderr, "No 'primarypghost' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "primarypgport", &primarypgport))        
+    {
+        fprintf(stderr, "No 'primarypgport' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_string(&cfg, "primarydbname", &primarydbname))        
+    {
+        fprintf(stderr, "No 'primarydbname' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_int(&cfg, "primarytimeout", &primarytimeout))        
+    {
+        fprintf(stderr, "No 'primarytimeout' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_string(&cfg, "primaryssl", &primaryssl))        
+    {
+        fprintf(stderr, "No 'primaryssl' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_string(&cfg, "secondarypglogin", &secondarypglogin))        
+    {
+        fprintf(stderr, "No 'secondarypglogin' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_string(&cfg, "secondarypgpwd", &secondarypgpwd))        
+    {
+        fprintf(stderr, "No 'secondarypgpwd' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
+    if(!config_lookup_string(&cfg, "secondarypghost", &secondarypghost))        
+    {
+        fprintf(stderr, "No 'secondarypghost' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_string(&cfg, "secondarydbname", &secondarydbname))        
+    {
+        fprintf(stderr, "No 'secondarydbname' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_int(&cfg, "secondarytimeout", &secondarytimeout))        
+    {
+        fprintf(stderr, "No 'secondarytimeout' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_string(&cfg, "secondaryssl", &secondaryssl))        
+    {
+        fprintf(stderr, "No 'secondaryssl' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+        
+    if(!config_lookup_string(&cfg, "transferaddr", &transferaddr))        
+    {
+        fprintf(stderr, "No 'transferaddr' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+
+    if(!config_lookup_int(&cfg, "transferport", &transferport))        
+    {
+        fprintf(stderr, "No 'transferport' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
     }
     
     config_destroy(&cfg);    
