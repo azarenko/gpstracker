@@ -8,6 +8,10 @@ CMakeFiles/gpstracker.dir/main.c.o
  /home/user/projects/gpstracker/cmdparam.h
  /home/user/projects/gpstracker/main.c
  /home/user/projects/gpstracker/settings.h
+ /home/user/projects/gpstracker/sockutils.h
 CMakeFiles/gpstracker.dir/settings.c.o
  /home/user/projects/gpstracker/settings.c
  /home/user/projects/gpstracker/settings.h
+CMakeFiles/gpstracker.dir/sockutils.c.o
+ /home/user/projects/gpstracker/sockutils.c
+ /home/user/projects/gpstracker/sockutils.h

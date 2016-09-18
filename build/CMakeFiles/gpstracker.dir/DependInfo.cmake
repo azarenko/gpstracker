@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/home/user/projects/gpstracker/cmdparam.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/cmdparam.c.o"
   "/home/user/projects/gpstracker/main.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/main.c.o"
   "/home/user/projects/gpstracker/settings.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/settings.c.o"
+  "/home/user/projects/gpstracker/sockutils.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/sockutils.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

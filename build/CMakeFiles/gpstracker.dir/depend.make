@@ -7,7 +7,11 @@ CMakeFiles/gpstracker.dir/cmdparam.c.o: ../cmdparam.h
 CMakeFiles/gpstracker.dir/main.c.o: ../cmdparam.h
 CMakeFiles/gpstracker.dir/main.c.o: ../main.c
 CMakeFiles/gpstracker.dir/main.c.o: ../settings.h
+CMakeFiles/gpstracker.dir/main.c.o: ../sockutils.h
 
 CMakeFiles/gpstracker.dir/settings.c.o: ../settings.c
 CMakeFiles/gpstracker.dir/settings.c.o: ../settings.h
+
+CMakeFiles/gpstracker.dir/sockutils.c.o: ../sockutils.c
+CMakeFiles/gpstracker.dir/sockutils.c.o: ../sockutils.h
 

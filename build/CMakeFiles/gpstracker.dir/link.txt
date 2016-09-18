@@ -1,1 +1,1 @@
-/usr/bin/cc  -g   CMakeFiles/gpstracker.dir/main.c.o CMakeFiles/gpstracker.dir/cmdparam.c.o CMakeFiles/gpstracker.dir/settings.c.o  -o gpstracker -rdynamic -levent -lpthread -lconfig 
+/usr/bin/cc  -g   CMakeFiles/gpstracker.dir/main.c.o CMakeFiles/gpstracker.dir/cmdparam.c.o CMakeFiles/gpstracker.dir/settings.c.o CMakeFiles/gpstracker.dir/sockutils.c.o  -o gpstracker -rdynamic -levent -lpthread -lconfig 

@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/gpstracker.dir/main.c.o"
   "CMakeFiles/gpstracker.dir/cmdparam.c.o"
   "CMakeFiles/gpstracker.dir/settings.c.o"
+  "CMakeFiles/gpstracker.dir/sockutils.c.o"
   "gpstracker.pdb"
   "gpstracker"
 )

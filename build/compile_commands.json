@@ -13,5 +13,10 @@
   "directory": "/home/user/projects/gpstracker/build",
   "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/settings.c.o   -c /home/user/projects/gpstracker/settings.c",
   "file": "/home/user/projects/gpstracker/settings.c"
+},
+{
+  "directory": "/home/user/projects/gpstracker/build",
+  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/sockutils.c.o   -c /home/user/projects/gpstracker/sockutils.c",
+  "file": "/home/user/projects/gpstracker/sockutils.c"
 }
 ]

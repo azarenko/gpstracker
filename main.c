@@ -16,6 +16,7 @@
 
 #include "cmdparam.h"
 #include "settings.h"
+#include "sockutils.h"
 
 static struct event_base *evbase;
 
@@ -63,6 +64,37 @@ static void sighandler(int signal) {
 }
 
 /*
+ * Accept function. prepare data
+ */
+void on_accept(int fd, short ev, void *arg) {
+	int client_fd;
+	struct sockaddr_in client_addr;
+	socklen_t client_len = sizeof(client_addr);	
+
+	client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_len);
+	if (client_fd < 0) {
+		syslog(LOG_ERR, "accept failed");
+		return;
+	}
+
+	/* Set the client socket to non-blocking mode. */
+	if (setnonblock(client_fd) < 0) {
+		syslog(LOG_ERR, "failed to set client socket to non-blocking");
+		close(client_fd);
+		return;
+	}	
+	
+	sleep(5);
+	
+	char buffer[SOCKET_BUFFER_SIZE];
+    
+    readfromsock(client_fd, SOCKET_BUFFER_SIZE, buffer, 10000);    
+	
+	close(client_fd);
+}
+
+
+/*
  * Main function
  */
 int main(int argc, char *argv[]) 
@@ -106,6 +138,7 @@ int main(int argc, char *argv[])
 	int listenfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (listenfd < 0) {
 		syslog(LOG_ERR, "socket listen failed");
+        goto exit;
 	}
 	
 	struct sockaddr_in listen_addr;
@@ -114,10 +147,12 @@ int main(int argc, char *argv[])
 	listen_addr.sin_addr.s_addr = INADDR_ANY;
 	listen_addr.sin_port = htons(port);
 	if (bind(listenfd, (struct sockaddr *)&listen_addr, sizeof(listen_addr)) < 0) {
-		err(1, "bind failed");
+        syslog(LOG_ERR, "bind failed");		
+        goto exit;
 	}
-	if (listen(listenfd, CONNECTION_BACKLOG) < 0) {
-		err(1, "listen failed");
+	if (listen(listenfd, CONNECTION_BACKLOG) < 0) {		
+        syslog(LOG_ERR, "listen failed");
+        goto exit;
 	}
 	int reuseaddr_on = 1;
 	setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &reuseaddr_on, sizeof(reuseaddr_on));
@@ -125,11 +160,35 @@ int main(int argc, char *argv[])
 	/* Set the socket to non-blocking, this is essential in event
 	 * based programming with libevent. */
 	if (setnonblock(listenfd) < 0) {
-		err(1, "failed to set server socket to non-blocking");
+        syslog(LOG_ERR, "failed to set server socket to non-blocking");	
+        goto exit;
 	}
     
     /* Initialize libevent. */
 	event_init();
+    
+    if ((evbase = event_base_new()) == NULL) {
+		syslog(LOG_ERR, "Unable to create socket accept event base");
+		close(listenfd);
+		goto exit;
+	}
+    
+    /* We now have a listening socket, we create a read event to
+	 * be notified when a client connects. */
+    struct event ev_accept;
+	event_set(&ev_accept, listenfd, EV_READ|EV_PERSIST, on_accept, NULL);
+	event_base_set(evbase, &ev_accept);
+	event_add(&ev_accept, NULL);
+
+	syslog(LOG_INFO, "Listen running.\n");
+
+	/* Start the event loop. */
+	event_base_dispatch(evbase);
+
+	event_base_free(evbase);
+	evbase = NULL;
+
+	close(listenfd);
     
  exit:
     syslog(LOG_INFO, "Stoping.");

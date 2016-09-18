@@ -51,6 +51,8 @@ cmdparam.h
 /home/user/projects/gpstracker/cmdparam.h
 settings.h
 /home/user/projects/gpstracker/settings.h
+sockutils.h
+/home/user/projects/gpstracker/sockutils.h
 
 /home/user/projects/gpstracker/settings.c
 settings.h
@@ -64,5 +66,21 @@ stdlib.h
 stdio.h
 -
 libconfig.h
+-
+
+/home/user/projects/gpstracker/sockutils.c
+sockutils.h
+/home/user/projects/gpstracker/sockutils.h
+
+/home/user/projects/gpstracker/sockutils.h
+sys/types.h
+-
+sys/socket.h
+-
+stdlib.h
+-
+stdio.h
+-
+unistd.h
 -
 

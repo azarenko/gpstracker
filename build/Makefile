@@ -248,6 +248,33 @@ settings.c.s:
 	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/settings.c.s
 .PHONY : settings.c.s
 
+sockutils.o: sockutils.c.o
+
+.PHONY : sockutils.o
+
+# target to build an object file
+sockutils.c.o:
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/sockutils.c.o
+.PHONY : sockutils.c.o
+
+sockutils.i: sockutils.c.i
+
+.PHONY : sockutils.i
+
+# target to preprocess a source file
+sockutils.c.i:
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/sockutils.c.i
+.PHONY : sockutils.c.i
+
+sockutils.s: sockutils.c.s
+
+.PHONY : sockutils.s
+
+# target to generate assembly for a file
+sockutils.c.s:
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/sockutils.c.s
+.PHONY : sockutils.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -270,6 +297,9 @@ help:
 	@echo "... settings.o"
 	@echo "... settings.i"
 	@echo "... settings.s"
+	@echo "... sockutils.o"
+	@echo "... sockutils.i"
+	@echo "... sockutils.s"
 .PHONY : help
 
 
