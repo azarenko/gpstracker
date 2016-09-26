@@ -4,9 +4,9 @@
 #include <libconfig.h>
 
 /* Connection backlog (# of backlogged connections to accept). */
-#define CONNECTION_BACKLOG 8
+#define CONNECTION_BACKLOG 1
 
-#define SOCKET_BUFFER_SIZE 2048
+#define SOCKET_BUFFER_SIZE 16
 
 // configuration file path
 const char* configFilePath;

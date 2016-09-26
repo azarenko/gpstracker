@@ -13,10 +13,13 @@
 #include <signal.h>
 #include <libconfig.h>
 #include <syslog.h>
+#include <pthread.h>
 
 #include "cmdparam.h"
 #include "settings.h"
 #include "sockutils.h"
+#include "devices.h"
+#include "fifo.h"
 
 static struct event_base *evbase;
 
@@ -84,13 +87,7 @@ void on_accept(int fd, short ev, void *arg) {
 		return;
 	}	
 	
-	sleep(5);
-	
-	char buffer[SOCKET_BUFFER_SIZE];
-    
-    readfromsock(client_fd, SOCKET_BUFFER_SIZE, buffer, 10000);    
-	
-	close(client_fd);
+	fifo_put(client_fd);
 }
 
 
@@ -180,6 +177,14 @@ int main(int argc, char *argv[])
 	event_base_set(evbase, &ev_accept);
 	event_add(&ev_accept, NULL);
 
+    fifo_init();
+    
+    for(int i=0; i<CONNECTION_BACKLOG; i++)
+    {
+        pthread_t pth;	
+        pthread_create(&pth, NULL, threadFunc, NULL);
+    }
+    
 	syslog(LOG_INFO, "Listen running.\n");
 
 	/* Start the event loop. */
@@ -188,6 +193,7 @@ int main(int argc, char *argv[])
 	event_base_free(evbase);
 	evbase = NULL;
 
+    fifo_free();
 	close(listenfd);
     
  exit:

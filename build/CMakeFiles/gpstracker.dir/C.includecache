@@ -16,6 +16,36 @@ string.h
 stdlib.h
 -
 
+/home/user/projects/gpstracker/devices.h
+sys/types.h
+-
+sys/socket.h
+-
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+settings.h
+/home/user/projects/gpstracker/settings.h
+sockutils.h
+/home/user/projects/gpstracker/sockutils.h
+fifo.h
+/home/user/projects/gpstracker/fifo.h
+
+/home/user/projects/gpstracker/devices/fm1100.c
+../devices.h
+/home/user/projects/gpstracker/devices.h
+
+/home/user/projects/gpstracker/fifo.c
+fifo.h
+/home/user/projects/gpstracker/fifo.h
+
+/home/user/projects/gpstracker/fifo.h
+pthread.h
+-
+
 /home/user/projects/gpstracker/main.c
 sys/types.h
 -
@@ -47,12 +77,18 @@ libconfig.h
 -
 syslog.h
 -
+pthread.h
+-
 cmdparam.h
 /home/user/projects/gpstracker/cmdparam.h
 settings.h
 /home/user/projects/gpstracker/settings.h
 sockutils.h
 /home/user/projects/gpstracker/sockutils.h
+devices.h
+/home/user/projects/gpstracker/devices.h
+fifo.h
+/home/user/projects/gpstracker/fifo.h
 
 /home/user/projects/gpstracker/settings.c
 settings.h
@@ -83,4 +119,8 @@ stdio.h
 -
 unistd.h
 -
+
+/home/user/projects/gpstracker/threadFunc.c
+devices.h
+/home/user/projects/gpstracker/devices.h
 

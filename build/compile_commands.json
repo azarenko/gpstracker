@@ -18,5 +18,20 @@
   "directory": "/home/user/projects/gpstracker/build",
   "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/sockutils.c.o   -c /home/user/projects/gpstracker/sockutils.c",
   "file": "/home/user/projects/gpstracker/sockutils.c"
+},
+{
+  "directory": "/home/user/projects/gpstracker/build",
+  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/fifo.c.o   -c /home/user/projects/gpstracker/fifo.c",
+  "file": "/home/user/projects/gpstracker/fifo.c"
+},
+{
+  "directory": "/home/user/projects/gpstracker/build",
+  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/threadFunc.c.o   -c /home/user/projects/gpstracker/threadFunc.c",
+  "file": "/home/user/projects/gpstracker/threadFunc.c"
+},
+{
+  "directory": "/home/user/projects/gpstracker/build",
+  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/devices/fm1100.c.o   -c /home/user/projects/gpstracker/devices/fm1100.c",
+  "file": "/home/user/projects/gpstracker/devices/fm1100.c"
 }
 ]

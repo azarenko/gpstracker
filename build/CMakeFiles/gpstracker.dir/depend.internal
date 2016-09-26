@@ -4,8 +4,19 @@
 CMakeFiles/gpstracker.dir/cmdparam.c.o
  /home/user/projects/gpstracker/cmdparam.c
  /home/user/projects/gpstracker/cmdparam.h
+CMakeFiles/gpstracker.dir/devices/fm1100.c.o
+ /home/user/projects/gpstracker/devices.h
+ /home/user/projects/gpstracker/devices/fm1100.c
+ /home/user/projects/gpstracker/fifo.h
+ /home/user/projects/gpstracker/settings.h
+ /home/user/projects/gpstracker/sockutils.h
+CMakeFiles/gpstracker.dir/fifo.c.o
+ /home/user/projects/gpstracker/fifo.c
+ /home/user/projects/gpstracker/fifo.h
 CMakeFiles/gpstracker.dir/main.c.o
  /home/user/projects/gpstracker/cmdparam.h
+ /home/user/projects/gpstracker/devices.h
+ /home/user/projects/gpstracker/fifo.h
  /home/user/projects/gpstracker/main.c
  /home/user/projects/gpstracker/settings.h
  /home/user/projects/gpstracker/sockutils.h
@@ -15,3 +26,9 @@ CMakeFiles/gpstracker.dir/settings.c.o
 CMakeFiles/gpstracker.dir/sockutils.c.o
  /home/user/projects/gpstracker/sockutils.c
  /home/user/projects/gpstracker/sockutils.h
+CMakeFiles/gpstracker.dir/threadFunc.c.o
+ /home/user/projects/gpstracker/devices.h
+ /home/user/projects/gpstracker/fifo.h
+ /home/user/projects/gpstracker/settings.h
+ /home/user/projects/gpstracker/sockutils.h
+ /home/user/projects/gpstracker/threadFunc.c
