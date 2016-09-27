@@ -9,6 +9,9 @@ CMakeFiles/gpstracker.dir/devices/fm1100.c.o: ../devices/fm1100.c
 CMakeFiles/gpstracker.dir/devices/fm1100.c.o: ../fifo.h
 CMakeFiles/gpstracker.dir/devices/fm1100.c.o: ../settings.h
 CMakeFiles/gpstracker.dir/devices/fm1100.c.o: ../sockutils.h
+CMakeFiles/gpstracker.dir/devices/fm1100.c.o: /usr/include/postgresql/libpq-fe.h
+CMakeFiles/gpstracker.dir/devices/fm1100.c.o: /usr/include/postgresql/pg_config_ext.h
+CMakeFiles/gpstracker.dir/devices/fm1100.c.o: /usr/include/postgresql/postgres_ext.h
 
 CMakeFiles/gpstracker.dir/fifo.c.o: ../fifo.c
 CMakeFiles/gpstracker.dir/fifo.c.o: ../fifo.h

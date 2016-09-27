@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <libconfig.h>
 
+config_t cfg;
+
 /* Connection backlog (# of backlogged connections to accept). */
-#define CONNECTION_BACKLOG 32
+#define CONNECTION_BACKLOG 1
 
 #define SOCKET_BUFFER_SIZE 16
 
@@ -45,7 +47,7 @@ const char* primarypgpwd;
 const char* primarypghost;
 
 // Port number to connect to at the server host, or socket file name extension for Unix-domain connections.
-int primarypgport;
+const char* primarypgport;
 
 // base name for psql database
 const char* primarydbname;
@@ -82,7 +84,7 @@ const char* secondarypgpwd;
 const char* secondarypghost;
 
 // Port number to connect to at the server host, or socket file name extension for Unix-domain connections.
-int secondarypgport;
+const char* secondarypgport;
 
 // base name for psql database
 const char* secondarydbname;

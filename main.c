@@ -14,6 +14,8 @@
 #include <libconfig.h>
 #include <syslog.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <locale.h>
 
 #include "cmdparam.h"
 #include "settings.h"
@@ -72,14 +74,20 @@ static void sighandler(int signal) {
 void on_accept(int fd, short ev, void *arg) {
 	int client_fd;
 	struct sockaddr_in client_addr;
-	socklen_t client_len = sizeof(client_addr);	
-
+	socklen_t client_len = sizeof(client_addr);	        
+        
 	client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_len);
 	if (client_fd < 0) {
 		syslog(LOG_ERR, "accept failed");
 		return;
 	}
 
+	if(isfifofull())
+    {
+        close(client_fd);
+        return;
+    }
+	
 	/* Set the client socket to non-blocking mode. */
 	if (setnonblock(client_fd) < 0) {
 		syslog(LOG_ERR, "failed to set client socket to non-blocking");
@@ -87,7 +95,10 @@ void on_accept(int fd, short ev, void *arg) {
 		return;
 	}	
 	
-	fifo_put(client_fd);
+	while(fifo_put(client_fd))
+    {
+        usleep(10 * 1000);
+    }
 }
 
 
@@ -96,6 +107,7 @@ void on_accept(int fd, short ev, void *arg) {
  */
 int main(int argc, char *argv[]) 
 {
+    setlocale(LC_ALL, "UTF-8");
     /*
      * init syslog
      */
@@ -198,6 +210,7 @@ int main(int argc, char *argv[])
     
  exit:
     syslog(LOG_INFO, "Stoping.");
+    config_destroy(&cfg);
     closelog();    
     return EXIT_SUCCESS;
 }

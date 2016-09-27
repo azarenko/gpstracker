@@ -1,8 +1,7 @@
 #include "settings.h"
 
 int readSettings(const char* configFilePath)
-{
-    config_t cfg;
+{    
     config_setting_t *setting;    
 
     config_init(&cfg);
@@ -70,7 +69,7 @@ int readSettings(const char* configFilePath)
         return(EXIT_FAILURE); 
     }
     
-    if(!config_lookup_int(&cfg, "primarypgport", &primarypgport))        
+    if(!config_lookup_string(&cfg, "primarypgport", &primarypgport))        
     {
         fprintf(stderr, "No 'primarypgport' setting in configuration file.\n");
         return(EXIT_FAILURE); 
@@ -112,12 +111,18 @@ int readSettings(const char* configFilePath)
         return(EXIT_FAILURE); 
     }
 
-    if(!config_lookup_string(&cfg, "secondarydbname", &secondarydbname))        
+    if(!config_lookup_string(&cfg, "secondarypgport", &secondarypgport))        
     {
-        fprintf(stderr, "No 'secondarydbname' setting in configuration file.\n");
+        fprintf(stderr, "No 'secondarypgport' setting in configuration file.\n");
         return(EXIT_FAILURE); 
     }
 
+    if(!config_lookup_string(&cfg, "primarypgport", &primarypgport))        
+    {
+        fprintf(stderr, "No 'primarypgport' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
     if(!config_lookup_int(&cfg, "secondarytimeout", &secondarytimeout))        
     {
         fprintf(stderr, "No 'secondarytimeout' setting in configuration file.\n");
@@ -141,7 +146,6 @@ int readSettings(const char* configFilePath)
         fprintf(stderr, "No 'transferport' setting in configuration file.\n");
         return(EXIT_FAILURE); 
     }
-    
-    config_destroy(&cfg);    
+            
     return EXIT_SUCCESS;
 }

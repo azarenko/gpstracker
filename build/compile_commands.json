@@ -1,37 +1,37 @@
 [
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/main.c.o   -c /home/user/projects/gpstracker/main.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/main.c.o   -c /home/user/projects/gpstracker/main.c",
   "file": "/home/user/projects/gpstracker/main.c"
 },
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/cmdparam.c.o   -c /home/user/projects/gpstracker/cmdparam.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/cmdparam.c.o   -c /home/user/projects/gpstracker/cmdparam.c",
   "file": "/home/user/projects/gpstracker/cmdparam.c"
 },
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/settings.c.o   -c /home/user/projects/gpstracker/settings.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/settings.c.o   -c /home/user/projects/gpstracker/settings.c",
   "file": "/home/user/projects/gpstracker/settings.c"
 },
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/sockutils.c.o   -c /home/user/projects/gpstracker/sockutils.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/sockutils.c.o   -c /home/user/projects/gpstracker/sockutils.c",
   "file": "/home/user/projects/gpstracker/sockutils.c"
 },
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/fifo.c.o   -c /home/user/projects/gpstracker/fifo.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/fifo.c.o   -c /home/user/projects/gpstracker/fifo.c",
   "file": "/home/user/projects/gpstracker/fifo.c"
 },
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/threadFunc.c.o   -c /home/user/projects/gpstracker/threadFunc.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/threadFunc.c.o   -c /home/user/projects/gpstracker/threadFunc.c",
   "file": "/home/user/projects/gpstracker/threadFunc.c"
 },
 {
   "directory": "/home/user/projects/gpstracker/build",
-  "command": "/usr/bin/cc    -g   -o CMakeFiles/gpstracker.dir/devices/fm1100.c.o   -c /home/user/projects/gpstracker/devices/fm1100.c",
+  "command": "/usr/bin/cc   -I/usr/include/postgresql  -g   -o CMakeFiles/gpstracker.dir/devices/fm1100.c.o   -c /home/user/projects/gpstracker/devices/fm1100.c",
   "file": "/home/user/projects/gpstracker/devices/fm1100.c"
 }
 ]
