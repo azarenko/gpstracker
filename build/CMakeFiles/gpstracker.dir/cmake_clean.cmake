@@ -4,7 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/gpstracker.dir/settings.c.o"
   "CMakeFiles/gpstracker.dir/sockutils.c.o"
   "CMakeFiles/gpstracker.dir/fifo.c.o"
-  "CMakeFiles/gpstracker.dir/threadFunc.c.o"
+  "CMakeFiles/gpstracker.dir/devices.c.o"
   "CMakeFiles/gpstracker.dir/devices/fm1100.c.o"
   "gpstracker.pdb"
   "gpstracker"

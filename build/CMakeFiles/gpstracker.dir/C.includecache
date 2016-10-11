@@ -16,6 +16,10 @@ string.h
 stdlib.h
 -
 
+/home/user/projects/gpstracker/devices.c
+devices.h
+/home/user/projects/gpstracker/devices.h
+
 /home/user/projects/gpstracker/devices.h
 sys/types.h
 -
@@ -28,6 +32,8 @@ stdio.h
 unistd.h
 -
 syslog.h
+-
+libpq-fe.h
 -
 settings.h
 /home/user/projects/gpstracker/settings.h
@@ -167,10 +173,6 @@ stdio.h
 -
 unistd.h
 -
-
-/home/user/projects/gpstracker/threadFunc.c
-devices.h
-/home/user/projects/gpstracker/devices.h
 
 /usr/include/postgresql/libpq-fe.h
 stdio.h

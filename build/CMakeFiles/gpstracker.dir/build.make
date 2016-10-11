@@ -177,28 +177,28 @@ CMakeFiles/gpstracker.dir/fifo.c.o.provides: CMakeFiles/gpstracker.dir/fifo.c.o.
 CMakeFiles/gpstracker.dir/fifo.c.o.provides.build: CMakeFiles/gpstracker.dir/fifo.c.o
 
 
-CMakeFiles/gpstracker.dir/threadFunc.c.o: CMakeFiles/gpstracker.dir/flags.make
-CMakeFiles/gpstracker.dir/threadFunc.c.o: ../threadFunc.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/user/projects/gpstracker/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/gpstracker.dir/threadFunc.c.o"
-	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/gpstracker.dir/threadFunc.c.o   -c /home/user/projects/gpstracker/threadFunc.c
+CMakeFiles/gpstracker.dir/devices.c.o: CMakeFiles/gpstracker.dir/flags.make
+CMakeFiles/gpstracker.dir/devices.c.o: ../devices.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/user/projects/gpstracker/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/gpstracker.dir/devices.c.o"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/gpstracker.dir/devices.c.o   -c /home/user/projects/gpstracker/devices.c
 
-CMakeFiles/gpstracker.dir/threadFunc.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/gpstracker.dir/threadFunc.c.i"
-	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/user/projects/gpstracker/threadFunc.c > CMakeFiles/gpstracker.dir/threadFunc.c.i
+CMakeFiles/gpstracker.dir/devices.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/gpstracker.dir/devices.c.i"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/user/projects/gpstracker/devices.c > CMakeFiles/gpstracker.dir/devices.c.i
 
-CMakeFiles/gpstracker.dir/threadFunc.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/gpstracker.dir/threadFunc.c.s"
-	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/user/projects/gpstracker/threadFunc.c -o CMakeFiles/gpstracker.dir/threadFunc.c.s
+CMakeFiles/gpstracker.dir/devices.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/gpstracker.dir/devices.c.s"
+	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/user/projects/gpstracker/devices.c -o CMakeFiles/gpstracker.dir/devices.c.s
 
-CMakeFiles/gpstracker.dir/threadFunc.c.o.requires:
+CMakeFiles/gpstracker.dir/devices.c.o.requires:
 
-.PHONY : CMakeFiles/gpstracker.dir/threadFunc.c.o.requires
+.PHONY : CMakeFiles/gpstracker.dir/devices.c.o.requires
 
-CMakeFiles/gpstracker.dir/threadFunc.c.o.provides: CMakeFiles/gpstracker.dir/threadFunc.c.o.requires
-	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/threadFunc.c.o.provides.build
-.PHONY : CMakeFiles/gpstracker.dir/threadFunc.c.o.provides
+CMakeFiles/gpstracker.dir/devices.c.o.provides: CMakeFiles/gpstracker.dir/devices.c.o.requires
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/devices.c.o.provides.build
+.PHONY : CMakeFiles/gpstracker.dir/devices.c.o.provides
 
-CMakeFiles/gpstracker.dir/threadFunc.c.o.provides.build: CMakeFiles/gpstracker.dir/threadFunc.c.o
+CMakeFiles/gpstracker.dir/devices.c.o.provides.build: CMakeFiles/gpstracker.dir/devices.c.o
 
 
 CMakeFiles/gpstracker.dir/devices/fm1100.c.o: CMakeFiles/gpstracker.dir/flags.make
@@ -232,7 +232,7 @@ gpstracker_OBJECTS = \
 "CMakeFiles/gpstracker.dir/settings.c.o" \
 "CMakeFiles/gpstracker.dir/sockutils.c.o" \
 "CMakeFiles/gpstracker.dir/fifo.c.o" \
-"CMakeFiles/gpstracker.dir/threadFunc.c.o" \
+"CMakeFiles/gpstracker.dir/devices.c.o" \
 "CMakeFiles/gpstracker.dir/devices/fm1100.c.o"
 
 # External object files for target gpstracker
@@ -243,7 +243,7 @@ gpstracker: CMakeFiles/gpstracker.dir/cmdparam.c.o
 gpstracker: CMakeFiles/gpstracker.dir/settings.c.o
 gpstracker: CMakeFiles/gpstracker.dir/sockutils.c.o
 gpstracker: CMakeFiles/gpstracker.dir/fifo.c.o
-gpstracker: CMakeFiles/gpstracker.dir/threadFunc.c.o
+gpstracker: CMakeFiles/gpstracker.dir/devices.c.o
 gpstracker: CMakeFiles/gpstracker.dir/devices/fm1100.c.o
 gpstracker: CMakeFiles/gpstracker.dir/build.make
 gpstracker: CMakeFiles/gpstracker.dir/link.txt
@@ -260,7 +260,7 @@ CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/cmdparam.c.o.requi
 CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/settings.c.o.requires
 CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/sockutils.c.o.requires
 CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/fifo.c.o.requires
-CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/threadFunc.c.o.requires
+CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/devices.c.o.requires
 CMakeFiles/gpstracker.dir/requires: CMakeFiles/gpstracker.dir/devices/fm1100.c.o.requires
 
 .PHONY : CMakeFiles/gpstracker.dir/requires

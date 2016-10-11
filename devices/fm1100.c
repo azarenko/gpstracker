@@ -22,18 +22,12 @@
 #include "../sockutils.h"
 #include "../devices.h"
 
-#define DECL  "DECLARE mycursor CURSOR FOR "
-#define FETCH "FETCH ALL in mycursor"
-#define CLOSE "CLOSE mycursor"
 #define MAXLENQUERY     2048
 #define REPORTLEN       256
 #define POCKETMAXLEN    1500
 #define MAXCHIELDS      4096
 #define FD_COPY(f, t)   (void)(*(t) = *(f))
 #define INITPACKETLEN 17
-
-static PGconn *conn;
-
 
 static const unsigned short crc16tab[] = /* CRC lookup table polynomial 0xA001 */
 {
@@ -86,126 +80,14 @@ unsigned short CRC16 ( unsigned char * puchMsg, unsigned short usDataLen )
  return crc16;
 }
 
-/*
- * 
- */
-int db_login(void)
-{
- char *pgoptions=NULL, *pgtty=NULL;
- conn = PQsetdbLogin(primarypghost, primarypgport, pgoptions, pgtty, primarydbname, primarypglogin, primarypgpwd);
- if (PQstatus(conn) == CONNECTION_BAD) { 
-    if(debug>1)syslog(LOG_ERR,"Connection to database failed %s", PQerrorMessage(conn));
-    PQfinish(conn);
-    return 0;
- }
- return 1;
-}
-
-/*
- * 
- */
-void db_logout(void)
-{
- PQfinish(conn);
-}
-
-// function for exec SQL without return data
-int execsql(char *sql, char *report)
-{
- PGresult   *res;
-
- res = PQexec(conn, "BEGIN");
- if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-    if(debug)syslog(LOG_ERR,"BEGIN command failed");
-    strncpy(report, PQerrorMessage(conn),99);
-    PQclear(res);
-    return (1);
- }
- if(debug>1)syslog(LOG_ERR,"BEGIN command ok");
-
- PQclear(res);
- res = PQexec(conn, sql);
- if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-    if(debug)syslog(LOG_ERR,"PQexec command failed");
-    strncpy(report, PQerrorMessage(conn),99);
-    PQclear(res);
-    return (2);
- }
- if(debug>1)syslog(LOG_ERR,"PQexec command ok");
-
- PQclear(res);
- res = PQexec(conn, "COMMIT");
- if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) { 
-    if(debug)syslog(LOG_ERR,"COMMIT command failed");
-    strncpy(report, PQerrorMessage(conn),99);
-    PQclear(res);
-    return (3);
- }
- PQclear(res);
- if(debug>1)syslog(LOG_ERR,"COMMIT command ok");
- return (0); 
-}
-
-// function for exec SQL with return data
-PGresult *getexecsql(char * sql)
-{ 
- char       *sqlfull;
- int        sqllen;
- PGresult   *res;
-
- res = PQexec(conn, "BEGIN");
- if (!res || PQresultStatus(res) != PGRES_COMMAND_OK){ 
-        if(debug)syslog(LOG_ERR,"BEGIN failed");
-        PQclear(res);
-        return res;
- }
- PQclear(res);
- if(debug>1)syslog(LOG_ERR,"BEGIN ok");
-
- sqllen=strlen(DECL);              sqllen+=strlen(sql);
- sqlfull=(char*)malloc(sqllen+1);  memset(sqlfull, 0x00, sqllen+1);
- strcpy(sqlfull, DECL);            strncat(sqlfull, sql, strlen(sql)); 
- if(debug>3)syslog(LOG_ERR,"%s",sqlfull);
- res = PQexec(conn, sqlfull);
- if (!res || PQresultStatus(res) != PGRES_COMMAND_OK){
-     if(debug)syslog(LOG_ERR,"DECLARE failed");
-     PQclear(res);
-     return res;
- }
- PQclear(res);
- free(sqlfull);
- if(debug>1)syslog(LOG_ERR,"DECLARE ok");
-
- res = PQexec(conn, FETCH);
- if (!res || PQresultStatus(res) != PGRES_TUPLES_OK){
-     if(debug)syslog(LOG_ERR,"FETCH failed");
-     PQclear(res);
-     return res;
- }
- if(debug>1)syslog(LOG_ERR,"FETCH ok");
- return res;
-}
-
-/*----------------------------------------------------------------------------------*/
-void clearres(PGresult *res)
-{
- PQclear(res);
- res = PQexec(conn, CLOSE);
- if(debug>1)syslog(LOG_ERR,"CLOSE ok");
- PQclear(res);
- res = PQexec(conn, "COMMIT");
- if(debug>1)syslog(LOG_ERR,"COMMIT ok");
- PQclear(res);
-} 
-
-void proto(const int* client_fd)
+void proto(const int* client_fd, PGconn *conn)
 {   
    unsigned char buf[POCKETMAXLEN+1];
    int j, buflen, waitbuflen=0, readbuflen, childpid;
    char query[MAXLENQUERY], *ip, cmdtext[256];;
    int ret, num;
    PGresult *res;
-   int iskill, ifexit, isfirst = 0, offset=0;
+   int iskill, ifexit, isfirst = 0, offset=0, iswaitpacket = 0;
    char id[sizeof(long)+1];
    char report[REPORTLEN];
    int  dstport;
@@ -245,11 +127,11 @@ readstart:
    //buflen = read(*client_fd,buf,POCKETMAXLEN);  
    if(waitbuflen > 0)
    {
-        buflen = readfromsock(*client_fd, waitbuflen - readbuflen, buf, 1000);
+        buflen = readfromsock(*client_fd, waitbuflen - readbuflen, buf, betweentimeout * 1000);
    }
    else
    {
-        buflen = readfromsock(*client_fd, INITPACKETLEN, buf, 1000);  
+        buflen = readfromsock(*client_fd, INITPACKETLEN, buf, betweentimeout * 1000);  
    }
 
    if(debug)syslog(LOG_WARNING, "read pocket length=%d childpid=%d",buflen, childpid);
@@ -279,16 +161,10 @@ readstart:
  
  waitbuflen=0;
 
- if(db_login() != 1 ){
-      if(debug)syslog(LOG_ERR,"can't login to database may be psql stopped");
-      return;
- }
-   if(debug>1)syslog(LOG_ERR,"login to database");
-
    bzero(query,MAXLENQUERY);
    ret = sprintf(query,"SELECT id FROM tbl_devices WHERE (\"imei\"='0%s');", buf+2);
 
-   res = getexecsql(query);
+   res = getexecsql(conn, query);
    if(res)
    {
       if (PQgetisnull(res,0,0))
@@ -302,29 +178,29 @@ readstart:
             ret = sprintf(id,"%s",PQgetvalue(res, 0, 0));
             ifexit=0;
             if(debug>1)syslog(LOG_ERR,"getexec sql found id=%s",id);
-         }
-         clearres(res);
+         }         
    }
+   clearres(conn, res);
 
    bzero(query,MAXLENQUERY);
 
    ret = sprintf(query,"INSERT INTO log_login (imei, iccid, \"Assigned\", \"when\", ip, port) VALUES('0%s','11111','t',now(),'%s','%d');", buf+2, ip, dstport);
 
    bzero(report,REPORTLEN);
-   ret = execsql(query,report);
-   if(ret){
-      if(debug)syslog(LOG_WARNING,"can't insert log record errno %d(%s)", ret, report);
-      db_logout();
+   ret = execsql(conn, query, report);
+   
+   if(ret)
+   {
+      if(debug)syslog(LOG_WARNING,"can't insert log record errno %d(%s)", ret, report);    
       return;
    }
+   
    if(debug>1)syslog(LOG_ERR,"insert log record errno %d(%s)", ret, report);
-
-   db_logout();
-   if(debug>1)syslog(LOG_ERR,"logout from database");
-
-   syslog(LOG_WARNING,"authpkt imei=0%s id=%s fromip=%s:%d",
+    
+   if(debug)syslog(LOG_WARNING,"authpkt imei=0%s id=%s fromip=%s:%d",
                                buf+2,   id,   ip,  dstport);
-   if (!ifexit){
+   if (!ifexit)
+   {
       bzero(cmdtext,256);
       cmdtext[0]=1;
       ret=write(*client_fd, cmdtext, 1);
@@ -376,9 +252,25 @@ parcenext:
       if(debug>1)syslog(LOG_ERR,"waitbuflen=%d readbuflen=%d",waitbuflen, readbuflen);
 
    }
-   if(waitbuflen > readbuflen ){
-      if(debug>1)syslog(LOG_ERR,"wait next portion %d", waitbuflen - readbuflen);
-      goto readstart;
+   if(waitbuflen > readbuflen)
+   {  
+      if(iswaitpacket == 0)
+      {
+        if(debug>1)
+        {
+            syslog(LOG_ERR,"wait next portion %d", waitbuflen - readbuflen);            
+        }
+        iswaitpacket = 1;
+        goto readstart;
+      }
+      else
+      {
+        if(debug>1)
+        {
+            syslog(LOG_ERR,"time out of wait partition %d", waitbuflen - readbuflen);            
+        }
+        return;
+      }    
    }
    if(debug>1)syslog(LOG_ERR,"read all data %d", waitbuflen);
 
@@ -616,27 +508,16 @@ nextframe:
 
    if(debug)syslog(LOG_ERR,"query: %s",query);
 
-   if(db_login() != 1 ){
-      if(debug)syslog(LOG_ERR,"can't login to database");
-      return;
-   }
-   if(debug>1)syslog(LOG_ERR,"login to database");
-
    bzero(report,REPORTLEN);
-   ret = execsql(query,report);
+   ret = execsql(conn, query,report);
    if(ret){
       if(debug)syslog(LOG_WARNING,"can't insert track record errno %d(%s)",ret,report);
       if(debug>1)syslog(LOG_WARNING,"%s",query);
-      db_logout();
-      return;
    }
-
-   db_logout();
-   if(debug>1)syslog(LOG_ERR,"logout from database");
 
    currnumber++;
    if(currnumber < numberofdata){
-      if(debug>1)syslog(LOG_ERR,"parce next frame %d of %d ", currnumber, numberofdata);
+      if(debug>1)syslog(LOG_ERR,"parce next frame %d of %d ", currnumber + 1, numberofdata);
       goto nextframe;
    }
 

@@ -6,7 +6,7 @@
 config_t cfg;
 
 /* Connection backlog (# of backlogged connections to accept). */
-#define CONNECTION_BACKLOG 1
+#define CONNECTION_BACKLOG 16
 
 #define SOCKET_BUFFER_SIZE 16
 

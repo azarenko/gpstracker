@@ -11,9 +11,9 @@ int readfromsock(int socket_fd, int len, const unsigned char* buffer, int utimeo
         result = recv(socket_fd, (void*)buffer + bytesRead, len - bytesRead, 0);
         if (result < 1 )
         {
-            if(++exectime < (utimeout / 10))
+            if(++exectime < utimeout)
             {
-                usleep(10 * 1000);
+                usleep(1000);
             }
             else
             {

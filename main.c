@@ -190,8 +190,8 @@ int main(int argc, char *argv[])
 	event_add(&ev_accept, NULL);
 
     fifo_init();
-    
-    for(int i=0; i<CONNECTION_BACKLOG; i++)
+    int i;
+    for(i=0; i<CONNECTION_BACKLOG; i++)
     {
         pthread_t pth;	
         pthread_create(&pth, NULL, threadFunc, NULL);

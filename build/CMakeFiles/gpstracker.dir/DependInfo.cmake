@@ -5,12 +5,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
   "/home/user/projects/gpstracker/cmdparam.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/cmdparam.c.o"
+  "/home/user/projects/gpstracker/devices.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/devices.c.o"
   "/home/user/projects/gpstracker/devices/fm1100.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/devices/fm1100.c.o"
   "/home/user/projects/gpstracker/fifo.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/fifo.c.o"
   "/home/user/projects/gpstracker/main.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/main.c.o"
   "/home/user/projects/gpstracker/settings.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/settings.c.o"
   "/home/user/projects/gpstracker/sockutils.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/sockutils.c.o"
-  "/home/user/projects/gpstracker/threadFunc.c" "/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir/threadFunc.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -194,6 +194,33 @@ cmdparam.c.s:
 	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/cmdparam.c.s
 .PHONY : cmdparam.c.s
 
+devices.o: devices.c.o
+
+.PHONY : devices.o
+
+# target to build an object file
+devices.c.o:
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/devices.c.o
+.PHONY : devices.c.o
+
+devices.i: devices.c.i
+
+.PHONY : devices.i
+
+# target to preprocess a source file
+devices.c.i:
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/devices.c.i
+.PHONY : devices.c.i
+
+devices.s: devices.c.s
+
+.PHONY : devices.s
+
+# target to generate assembly for a file
+devices.c.s:
+	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/devices.c.s
+.PHONY : devices.c.s
+
 devices/fm1100.o: devices/fm1100.c.o
 
 .PHONY : devices/fm1100.o
@@ -329,33 +356,6 @@ sockutils.c.s:
 	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/sockutils.c.s
 .PHONY : sockutils.c.s
 
-threadFunc.o: threadFunc.c.o
-
-.PHONY : threadFunc.o
-
-# target to build an object file
-threadFunc.c.o:
-	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/threadFunc.c.o
-.PHONY : threadFunc.c.o
-
-threadFunc.i: threadFunc.c.i
-
-.PHONY : threadFunc.i
-
-# target to preprocess a source file
-threadFunc.c.i:
-	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/threadFunc.c.i
-.PHONY : threadFunc.c.i
-
-threadFunc.s: threadFunc.c.s
-
-.PHONY : threadFunc.s
-
-# target to generate assembly for a file
-threadFunc.c.s:
-	$(MAKE) -f CMakeFiles/gpstracker.dir/build.make CMakeFiles/gpstracker.dir/threadFunc.c.s
-.PHONY : threadFunc.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -372,6 +372,9 @@ help:
 	@echo "... cmdparam.o"
 	@echo "... cmdparam.i"
 	@echo "... cmdparam.s"
+	@echo "... devices.o"
+	@echo "... devices.i"
+	@echo "... devices.s"
 	@echo "... devices/fm1100.o"
 	@echo "... devices/fm1100.i"
 	@echo "... devices/fm1100.s"
@@ -387,9 +390,6 @@ help:
 	@echo "... sockutils.o"
 	@echo "... sockutils.i"
 	@echo "... sockutils.s"
-	@echo "... threadFunc.o"
-	@echo "... threadFunc.i"
-	@echo "... threadFunc.s"
 .PHONY : help
 
 
