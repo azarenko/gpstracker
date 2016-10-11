@@ -28,6 +28,7 @@
 #define MAXCHIELDS      4096
 #define FD_COPY(f, t)   (void)(*(t) = *(f))
 #define INITPACKETLEN 17
+#define SERIALIZESENSORLEN 2048
 
 static const unsigned short crc16tab[] = /* CRC lookup table polynomial 0xA001 */
 {
@@ -84,7 +85,7 @@ void proto(const int* client_fd, PGconn *conn)
 {   
    unsigned char buf[POCKETMAXLEN+1];
    int j, buflen, waitbuflen=0, readbuflen, childpid;
-   char query[MAXLENQUERY], *ip, cmdtext[256];;
+   char query[MAXLENQUERY], *ip, cmdtext[256];
    int ret, num;
    PGresult *res;
    int iskill, ifexit, isfirst = 0, offset=0, iswaitpacket = 0;
@@ -94,6 +95,9 @@ void proto(const int* client_fd, PGconn *conn)
    unsigned char allbuf[POCKETMAXLEN+1];
    unsigned int recvcrc, crc;
    unsigned int currnumber=0, numberofdata=0;
+   char sensorsdata[SERIALIZESENSORLEN];
+   char sensorvaluebuffer[128];
+   int sensorscount = 0;
 
    int multibytename;
     long multibyteval;
@@ -105,7 +109,7 @@ void proto(const int* client_fd, PGconn *conn)
     char dlt, dln;
     int alt;
     int angle;
-    unsigned char sat;
+    int sat;
     int speed;
     char skipcount=0;
     
@@ -162,7 +166,7 @@ readstart:
  waitbuflen=0;
 
    bzero(query,MAXLENQUERY);
-   ret = sprintf(query,"SELECT id FROM tbl_devices WHERE (\"imei\"='0%s');", buf+2);
+   ret = sprintf(query,"SELECT * FROM public.deviceauth('0%s', '', '%s', %d, 10);", buf+2, ip, dstport);
 
    res = getexecsql(conn, query);
    if(res)
@@ -180,22 +184,7 @@ readstart:
             if(debug>1)syslog(LOG_ERR,"getexec sql found id=%s",id);
          }         
    }
-   clearres(conn, res);
-
-   bzero(query,MAXLENQUERY);
-
-   ret = sprintf(query,"INSERT INTO log_login (imei, iccid, \"Assigned\", \"when\", ip, port) VALUES('0%s','11111','t',now(),'%s','%d');", buf+2, ip, dstport);
-
-   bzero(report,REPORTLEN);
-   ret = execsql(conn, query, report);
-   
-   if(ret)
-   {
-      if(debug)syslog(LOG_WARNING,"can't insert log record errno %d(%s)", ret, report);    
-      return;
-   }
-   
-   if(debug>1)syslog(LOG_ERR,"insert log record errno %d(%s)", ret, report);
+   clearres(conn, res);   
     
    if(debug)syslog(LOG_WARNING,"authpkt imei=0%s id=%s fromip=%s:%d",
                                buf+2,   id,   ip,  dstport);
@@ -332,8 +321,8 @@ nextframe:
    time = time - 2*60*60;
    if(debug) syslog(LOG_WARNING,"parce date %lu",time);
 
-   // skip priority
-   offset++;
+   // priority
+   int priority = allbuf[offset++];
 
    lat = allbuf[offset]; offset++;
    lat = lat << 8;
@@ -398,26 +387,42 @@ nextframe:
 //   IO element ID of Event generated (in this case when 00 – data generated not on event)
    if(debug) syslog(LOG_WARNING,"count io elements in data  %d",allbuf[offset]);
    offset++;
-
+   
+   bzero(sensorsdata,SERIALIZESENSORLEN);
+   
 // count 1 byte param
    skipcount = allbuf[offset]; offset++;
    if(debug) syslog(LOG_WARNING,"parce 1 byte count %d",skipcount);
+   sensorscount += skipcount;
    for(j=0; j< skipcount; j++){
       // skip paramname
       if(debug) syslog(LOG_WARNING,"parce 1 byte paramname %d",allbuf[offset]);
+      
+      sprintf(sensorvaluebuffer, ",%d", allbuf[offset]);
+      strcat(sensorsdata, sensorvaluebuffer);
+      
       offset++;
       // skip value
       if(debug) syslog(LOG_WARNING,"parce 1 byte paramval %d",allbuf[offset]);
+      
+      sprintf(sensorvaluebuffer, ",%d", allbuf[offset]);
+      strcat(sensorsdata, sensorvaluebuffer);
+      
       offset++;
    }
 
 // count 2 byte param
    skipcount = allbuf[offset]; offset++;
    if(debug) syslog(LOG_WARNING,"parce 2 byte count %d",skipcount);
+   sensorscount += skipcount;
    for(j=0; j< skipcount; j++){
       // skip paramname
       if(debug) syslog(LOG_WARNING,"parce 2 byte paramname %d",allbuf[offset]);
       multibytename = allbuf[offset];
+      
+      sprintf(sensorvaluebuffer, ",%d", multibytename);
+      strcat(sensorsdata, sensorvaluebuffer);
+      
       offset++;
       // skip value
       if(debug) syslog(LOG_WARNING,"parce 1 byte paramval %d",allbuf[offset]);
@@ -437,16 +442,24 @@ nextframe:
       }else if(multibytename == 66){
         batlvl = multibyteval/1000;
       }
+      
+      sprintf(sensorvaluebuffer, ",%ld", multibyteval);
+      strcat(sensorsdata, sensorvaluebuffer);
    }
 
 // count 4 byte param
    skipcount = allbuf[offset]; offset++;
    if(debug) syslog(LOG_WARNING,"parce 4 byte count %d",skipcount);
+   sensorscount += skipcount;
    for(j=0; j< skipcount; j++){
       // skip paramname
       if(debug) syslog(LOG_WARNING,"parce 4 byte paramname %d",allbuf[offset]);
       multibytename = allbuf[offset];
       offset++;
+      
+      sprintf(sensorvaluebuffer, ",%d", multibytename);
+      strcat(sensorsdata, sensorvaluebuffer);
+      
       // skip value
       if(debug) syslog(LOG_WARNING,"parce 1 byte paramval %d",allbuf[offset]);
       multibyteval = allbuf[offset]; multibyteval = multibyteval << 8;
@@ -461,16 +474,24 @@ nextframe:
       multibyteval = multibyteval + allbuf[offset];
       offset++;
       if(debug) syslog(LOG_WARNING,"parce param=%d paramval %ld", multibytename, multibyteval);
+      
+      sprintf(sensorvaluebuffer, ",%ld", multibyteval);
+      strcat(sensorsdata, sensorvaluebuffer);
    }
 
 // count 8 byte param
    skipcount = allbuf[offset]; offset++;
    if(debug) syslog(LOG_WARNING,"parce 8 byte count %d",skipcount);
+   sensorscount += skipcount;
    for(j=0; j< skipcount; j++){
       // skip paramname
       if(debug) syslog(LOG_WARNING,"parce 8 byte paramname %d",allbuf[offset]);
       multibytename = allbuf[offset];
       offset++;
+      
+      sprintf(sensorvaluebuffer, ",%d", multibytename);
+      strcat(sensorsdata, sensorvaluebuffer);
+      
       // skip value
       if(debug) syslog(LOG_WARNING,"parce 1 byte paramval %d",allbuf[offset]);
       multibyteval = allbuf[offset]; multibyteval = multibyteval << 8;
@@ -497,23 +518,64 @@ nextframe:
       multibyteval = multibyteval + allbuf[offset];
       offset++;
       if(debug) syslog(LOG_WARNING,"parce param=%d paramval %ld", multibytename, multibyteval);
+      
+      sprintf(sensorvaluebuffer, ",%ld", multibyteval);
+      strcat(sensorsdata, sensorvaluebuffer);
    }
 
 
    bzero(query,MAXLENQUERY);
    ret = sprintf(query,
-    "INSERT INTO track (local_port,s_date,port,  ip,  id,                        w_date,   y,   x,        speed,satelites,x_direct,y_direct, a1,   a2, d1, d2, d3, d4,  a3,  a4,batlevel)"\
-                     " VALUES('%d', now(),'%d','%s','%s',to_timestamp('%lu')::timestamp,'%f','%f',trunc('%f',0),'%d',         '%c',    '%c','%d','%d','f','f','f','f','%d','%d',    '%d');",
-                        port,dstport,ip,id,time,lt,ln,speed/1.852, sat, dln, dlt,a1,a2, alt, angle,batlvl);
+    "SELECT public.device10save(\
+    10::bigint,\
+    %s::bigint,\
+    %lu::bigint,\
+    %f::double precision,\
+    %f::double precision,\
+    %f::real,\
+    %d::integer,\
+    %d::smallint,\
+    0::smallint,\
+    %d::smallint,\
+    0::smallint,\
+    0::smallint,\
+    %d::integer,\
+    0::bigint,\
+    ''::text,\
+    FALSE,\
+    ARRAY[0,0,%d%s]::double precision[],\
+    ARRAY[]::text[]\
+    );",
+                 id,                 
+                 time,
+                 lt,
+                 ln,
+                 speed/1.852, 
+                 priority,
+                 alt,
+                 sat,                 
+                 batlvl,
+                 sensorscount,
+                 sensorsdata
+                );
 
    if(debug)syslog(LOG_ERR,"query: %s",query);
 
    bzero(report,REPORTLEN);
-   ret = execsql(conn, query,report);
-   if(ret){
-      if(debug)syslog(LOG_WARNING,"can't insert track record errno %d(%s)",ret,report);
-      if(debug>1)syslog(LOG_WARNING,"%s",query);
+   
+   res = getexecsql(conn, query);
+   if(res)
+   {
+      if (PQgetisnull(res,0,0))
+      {
+            if(debug)syslog(LOG_WARNING,"can't insert track record errno %d(%s)",ret,report);
+            if(debug>1)syslog(LOG_WARNING,"%s",query);
+      }
+      else 
+      {            
+      }         
    }
+   clearres(conn, res); 
 
    currnumber++;
    if(currnumber < numberofdata){

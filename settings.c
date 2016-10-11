@@ -15,6 +15,12 @@ int readSettings(const char* configFilePath)
         return(EXIT_FAILURE);
     }
     
+    if(!config_lookup_int(&cfg, "CONNECTION_BACKLOG", &CONNECTION_BACKLOG))        
+    {
+        fprintf(stderr, "No 'CONNECTION_BACKLOG' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+    
     if(!config_lookup_string(&cfg, "addr", &addr))        
     {
         fprintf(stderr, "No 'addr' setting in configuration file.\n");
