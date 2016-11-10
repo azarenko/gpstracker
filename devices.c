@@ -4,6 +4,9 @@
 #define FETCH "FETCH ALL in mycursor"
 #define CLOSE "CLOSE mycursor"
 
+/*
+ *
+ */
 void *threadFunc(void *arg)
 {   
     PGconn *conn = NULL;  
@@ -34,6 +37,7 @@ void *threadFunc(void *arg)
  */
 int db_login(PGconn **conn)
 {    
+    pthread_mutex_lock(&connectionm);
     if (PQstatus(*conn) == CONNECTION_BAD) 
     {
         char *pgoptions=NULL, *pgtty=NULL;
@@ -49,18 +53,22 @@ int db_login(PGconn **conn)
             { 
                 if(debug>1)syslog(LOG_ERR,"Connection to database failed %s", PQerrorMessage(*conn));
                 PQfinish(*conn);
+		pthread_mutex_unlock(&connectionm);
                 return 0;
             }
-        }        
-        return 1;
+        }       
+        pthread_mutex_unlock(&connectionm);
     }
     else
     {
+	pthread_mutex_unlock(&connectionm);
         return 1;
     }
 }
 
-// function for exec SQL without return data
+/*
+ * function for exec SQL without return data
+ */
 int execsql(PGconn *conn, char *sql, char *report)
 {
     if (PQstatus(conn) == CONNECTION_BAD) 

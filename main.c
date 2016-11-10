@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
         syslog(LOG_ERR, "failed to set server socket to non-blocking");	
         goto exit;
 	}
-    
+        
     /* Initialize libevent. */
 	event_init();
     
@@ -188,8 +188,10 @@ int main(int argc, char *argv[])
 	event_set(&ev_accept, listenfd, EV_READ|EV_PERSIST, on_accept, NULL);
 	event_base_set(evbase, &ev_accept);
 	event_add(&ev_accept, NULL);
-
+	
     fifo_init();
+    pthread_mutex_init(&connectionm, NULL);
+    
     int i;
     for(i=0; i<CONNECTION_BACKLOG; i++)
     {

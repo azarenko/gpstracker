@@ -153,5 +153,18 @@ int readSettings(const char* configFilePath)
         return(EXIT_FAILURE); 
     }
             
+    /*
+     * Validation section
+     */
+    
+    if(CONNECTION_BACKLOG <= 0)
+    {
+      CONNECTION_BACKLOG = 1;
+    }
+    if(CONNECTION_BACKLOG > 100)
+    {
+      CONNECTION_BACKLOG = 100;
+    }
+            
     return EXIT_SUCCESS;
 }

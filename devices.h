@@ -13,6 +13,8 @@
 #include "sockutils.h"
 #include "fifo.h"
 
+pthread_mutex_t connectionm;
+
 void proto(const int* client_fd, PGconn *conn);
 void *threadFunc(void *arg);
 
