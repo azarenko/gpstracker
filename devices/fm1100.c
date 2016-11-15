@@ -166,7 +166,7 @@ readstart:
  waitbuflen=0;
 
    bzero(query,MAXLENQUERY);
-   ret = sprintf(query,"SELECT * FROM public.deviceauth('0%s', '', '%s', %d, 10);", buf+2, ip, dstport);
+   ret = sprintf(query,"SELECT * FROM public.deviceauth('%s', '', '%s', %d, 10);", buf+2, ip, dstport);
 
    res = getexecsql(conn, query);
    if(res)
