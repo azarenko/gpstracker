@@ -324,25 +324,6 @@ nextframe:
    // priority
    int priority = allbuf[offset++];
 
-   lat = allbuf[offset]; offset++;
-   lat = lat << 8;
-   lat = lat+allbuf[offset]; offset++;
-   lat = lat << 8;
-   lat = lat+allbuf[offset]; offset++;
-   lat = lat << 8;
-   lat = lat+allbuf[offset]; offset++;
-    lt = lat;
-    lt = lt / 10000000 ;
-   ltfract = modf (lt , &ltint);
-   lt = ltint*100 + ltfract*60;
-   if(lt < 0 ){
-      lt = lt * (-1);
-      dlt='S';
-   }else{
-      dlt='N';
-   }
-   if(debug) syslog(LOG_WARNING,"parce latitude %c%f", dlt,lt);
-
    lon = allbuf[offset]; offset++;
    lon = lon << 8;
    lon = lon+allbuf[offset]; offset++;
@@ -351,7 +332,7 @@ nextframe:
    lon = lon << 8;
    lon = lon+allbuf[offset]; offset++;
     ln = lon;
-    ln = ln / 10000000 ;
+    ln = ln / 10000000;	   
    lnfract = modf (ln , &lnint);
    ln = lnint*100 + lnfract*60;
    if( ln < 0 ){
@@ -361,6 +342,25 @@ nextframe:
       dln='E';
    }
    if(debug) syslog(LOG_WARNING,"parce longitude %c%f", dln,ln);
+
+   lat = allbuf[offset]; offset++;
+   lat = lat << 8;
+   lat = lat+allbuf[offset]; offset++;
+   lat = lat << 8;
+   lat = lat+allbuf[offset]; offset++;
+   lat = lat << 8;
+   lat = lat+allbuf[offset]; offset++;
+    lt = lat;
+    lt = lt / 10000000;
+   ltfract = modf (lt , &ltint);
+   lt = ltint*100 + ltfract*60;
+   if(lt < 0 ){
+      lt = lt * (-1);
+      dlt='S';
+   }else{
+      dlt='N';
+   }
+   if(debug) syslog(LOG_WARNING,"parce latitude %c%f", dlt,lt);
 
    alt = allbuf[offset]; offset++;
    alt = alt << 8;
