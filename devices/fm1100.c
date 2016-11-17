@@ -333,6 +333,9 @@ nextframe:
    lon = lon+allbuf[offset]; offset++;
     ln = lon;
     ln = ln / 10000000;	   
+
+   if(debug) syslog(LOG_WARNING,"parce raw longitude %f", ln);
+
    lnfract = modf (ln , &lnint);
    ln = lnint*100 + lnfract*60;
    if( ln < 0 ){
@@ -352,6 +355,9 @@ nextframe:
    lat = lat+allbuf[offset]; offset++;
     lt = lat;
     lt = lt / 10000000;
+
+   if(debug) syslog(LOG_WARNING,"parce raw latitude %f", lt);
+
    ltfract = modf (lt , &ltint);
    lt = ltint*100 + ltfract*60;
    if(lt < 0 ){
