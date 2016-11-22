@@ -131,7 +131,12 @@ int main(int argc, char *argv[])
         syslog(LOG_ERR, "Configuration file error.");
         goto exit;
     }
-    
+
+    if(daemon == 1)
+    {
+	 daemon(1, 1);
+    }    
+
     /* Set signal handlers */
 	sigset_t sigset;
 	sigemptyset(&sigset);
@@ -153,7 +158,7 @@ int main(int argc, char *argv[])
 	struct sockaddr_in listen_addr;
 	memset(&listen_addr, 0, sizeof(listen_addr));
 	listen_addr.sin_family = AF_INET;
-	listen_addr.sin_addr.s_addr = INADDR_ANY;
+	listen_addr.sin_addr.s_addr = inet_addr(addr); 
 	listen_addr.sin_port = htons(port);
 	if (bind(listenfd, (struct sockaddr *)&listen_addr, sizeof(listen_addr)) < 0) {
         syslog(LOG_ERR, "bind failed");		

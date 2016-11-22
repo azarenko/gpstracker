@@ -152,6 +152,12 @@ int readSettings(const char* configFilePath)
         fprintf(stderr, "No 'transferport' setting in configuration file.\n");
         return(EXIT_FAILURE); 
     }
+
+    if(!config_lookup_int(&cfg, "daemon", &daemon))        
+    {
+        fprintf(stderr, "No 'daemon' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
             
     /*
      * Validation section

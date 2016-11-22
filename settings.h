@@ -103,4 +103,6 @@ const char* secondaryssl;
 const char* transferaddr;
 int transferport;
 
+int daemon;
+
 int readSettings(const char* configFilePath);
