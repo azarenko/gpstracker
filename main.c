@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 
     if(isdaemon == 1)
     {
-	 isdaemon(1, 1);
+	 daemon(1, 1);
     }    
 
     /* Set signal handlers */
