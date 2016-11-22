@@ -153,9 +153,9 @@ int readSettings(const char* configFilePath)
         return(EXIT_FAILURE); 
     }
 
-    if(!config_lookup_int(&cfg, "daemon", &daemon))        
+    if(!config_lookup_int(&cfg, "isdaemon", &isdaemon))        
     {
-        fprintf(stderr, "No 'daemon' setting in configuration file.\n");
+        fprintf(stderr, "No 'isdaemon' setting in configuration file.\n");
         return(EXIT_FAILURE); 
     }
             
