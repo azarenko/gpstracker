@@ -318,7 +318,6 @@ nextframe:
    time = time << 8;
    time = time+allbuf[offset]; offset++;
    time = time / 1000;
-   time = time - 2*60*60;
    if(debug) syslog(LOG_WARNING,"parce date %lu",time);
 
    // priority
