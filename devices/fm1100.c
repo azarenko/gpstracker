@@ -107,10 +107,10 @@ void proto(const int* client_fd, PGconn *conn)
     double lt, ltfract, ltint;
     double ln, lnfract, lnint;
     char dlt, dln;
-    int alt;
-    int angle;
-    int sat;
-    int speed;
+    short alt;
+    short angle;
+    short sat;
+    short speed;
     char skipcount=0;
     
     int a1=0, a2=0;
