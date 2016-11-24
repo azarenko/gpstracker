@@ -1,7 +1,0 @@
-/home/user/projects/gpstracker/build/CMakeFiles/install.dir
-/home/user/projects/gpstracker/build/CMakeFiles/list_install_components.dir
-/home/user/projects/gpstracker/build/CMakeFiles/rebuild_cache.dir
-/home/user/projects/gpstracker/build/CMakeFiles/gpstracker.dir
-/home/user/projects/gpstracker/build/CMakeFiles/install/local.dir
-/home/user/projects/gpstracker/build/CMakeFiles/install/strip.dir
-/home/user/projects/gpstracker/build/CMakeFiles/edit_cache.dir
