@@ -175,7 +175,7 @@ readstart:
       {
          sprintf(id,"0");
          ifexit=1;
-         if(debug>1)syslog(LOG_ERR,"getexec sql id not found ");
+         if(debug>1)syslog(LOG_ERR,"getexec sql id not found %s", buf+2);
         } 
          else 
          {
