@@ -158,7 +158,13 @@ int readSettings(const char* configFilePath)
         fprintf(stderr, "No 'isdaemon' setting in configuration file.\n");
         return(EXIT_FAILURE); 
     }
-            
+       
+    if(!config_lookup_string(&cfg, "pidfile", &pidfile))        
+    {
+        fprintf(stderr, "No 'pidfile' setting in configuration file.\n");
+        return(EXIT_FAILURE); 
+    }
+       
     /*
      * Validation section
      */

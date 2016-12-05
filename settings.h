@@ -105,4 +105,6 @@ int transferport;
 
 int isdaemon;
 
+const char* pidfile;
+
 int readSettings(const char* configFilePath);
