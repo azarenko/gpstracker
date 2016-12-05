@@ -122,10 +122,10 @@ void proto(const int* client_fd, PGconn *conn)
     
    dstport = htons(client_addr.sin_port);
    ip = inet_ntoa(client_addr.sin_addr);
-   
-readstart:
+
    childpid=getpid();
    
+readstart:   
    bzero(buf,POCKETMAXLEN+1);
    
    //buflen = read(*client_fd,buf,POCKETMAXLEN);  
