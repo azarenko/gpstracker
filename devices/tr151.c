@@ -69,14 +69,14 @@ readstart:
 
    if(!buflen){
       if(debug)syslog(LOG_WARNING, "read pocket length=%d goto killme childpid=%d",buflen,  childpid);
-      goto killme;
+      return;
    }
 
 //    $357248013731314,9,3,111212,155028,E03503.6611,N4826.6176,134.9,1.93,234.89,6,1.43!
 
    if (buf[0]   != 0x24 ) { // G
       if(debug)syslog(LOG_ERR,"Bad flag start pocket go to exit");
-      goto killme;
+      return;
    }
    goto startparce;
 
@@ -101,7 +101,7 @@ startparce:
    bzero(query,MAXLENQUERY);
    ret = sprintf(query,"SELECT id FROM devices WHERE (\"TelitImei\"='0%s');", parr[0]+1);
 
-   res = getexecsql(query);
+   res = getexecsql(conn,query);
    if(res){
       if (PQgetisnull(res,0,0)){
          sprintf(id,"0");
@@ -112,7 +112,7 @@ startparce:
             ifexit=0;
          if(debug>1)syslog(LOG_ERR,"getexec sql found id=%s",id);
          }
-         clearres(res);
+         clearres(conn, res);
    }
 
    bzero(query,MAXLENQUERY);
@@ -121,18 +121,18 @@ startparce:
                                           parr[0]+1, ip, dstport);
 
    bzero(report,REPORTLEN);
-   ret = execsql(query,report);
+   ret = execsql(conn,query,report);
    if(ret){
       if(debug)syslog(LOG_WARNING,"can't insert log record errno %d(%s)", ret, report);
-      db_logout();
-      goto killme;
+      return;
    }
    if(debug>1)syslog(LOG_ERR,"insert log record errno %d(%s)", ret, report);
 
+   /*
    bzero(argv[0], argv0size);
    snprintf(argv[0], argv0size, "/usr/local/sbin/151-%s", id);
    if(debug>1)syslog(LOG_ERR,"set new process name %s",argv[0]);
-
+   */
    syslog(LOG_WARNING,"authpkt imei=0%s id=%s fromip=%s:%d",
                                parr[0]+1,   id,   ip,  dstport);
    if (!ifexit){
@@ -142,7 +142,7 @@ startparce:
    // simple say about unknown device
    if(debug)syslog(LOG_WARNING,"unknown authpkt imei=%s id=%s fromip=%s:%d",
                                                 parr[1],   id,   ip,  dstport);
-   goto killme;
+   return;
 
 insertcoordinates:
 //   if(debug)syslog(LOG_ERR,"insert coordinates");
@@ -175,23 +175,13 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
 
    if(debug)syslog(LOG_ERR,"query: %s",query);
 
-   if(db_login() != 1 ){
-      if(debug)syslog(LOG_ERR,"can't login to database");
-      goto killme;
-   }
-   if(debug>1)syslog(LOG_ERR,"login to database");
-
    bzero(report,REPORTLEN);
-   ret = execsql(query,report);
+   ret = execsql(conn,query,report);
    if(ret){
       if(debug)syslog(LOG_WARNING,"can't insert track record errno %d(%s)",ret,report);
       if(debug>1)syslog(LOG_WARNING,"%s",query);
-      db_logout();
-      goto killme;
+      return;
    }
-
-   db_logout();
-   if(debug>1)syslog(LOG_ERR,"logout from database");
 
    bzero(cmdtext,256);
    ret = sprintf(cmdtext,"$OK!");
