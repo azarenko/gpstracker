@@ -15,8 +15,6 @@
 
 pthread_mutex_t connectionm;
 
-char* protoname;
-
 void proto(const int* client_fd, PGconn *conn);
 void *threadFunc(void *arg);
 

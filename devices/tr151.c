@@ -22,8 +22,6 @@
 #include "../sockutils.h"
 #include "../devices.h"
 
-protoname = "tr151";
-
 #define MAXLENQUERY     2048
 #define REPORTLEN       256
 #define POCKETMAXLEN    1500
