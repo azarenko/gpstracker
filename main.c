@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     /*
      * init syslog
      */
-    openlog(__TARGET__, 0, LOG_USER);
+    openlog("__TARGET__", 0, LOG_USER);
     syslog(LOG_INFO, "Starting.");
     
     /*
