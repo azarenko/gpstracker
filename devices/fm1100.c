@@ -30,6 +30,8 @@
 #define INITPACKETLEN 17
 #define SERIALIZESENSORLEN 2048
 
+protoname = "fm1100";
+
 static const unsigned short crc16tab[] = /* CRC lookup table polynomial 0xA001 */
 {
 0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
