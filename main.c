@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -7,7 +9,6 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#define _GNU_SOURCE
 #include <errno.h>
 #include <err.h>
 #include <event.h>
