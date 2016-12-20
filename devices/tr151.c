@@ -18,6 +18,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
+#include <time.h>
 
 #include "../sockutils.h"
 #include "../devices.h"
@@ -43,6 +44,22 @@ void proto(const int* client_fd, PGconn *conn)
    int  dstport;
    unsigned char allbuf[POCKETMAXLEN+1]; 
 
+    long time;
+    int lon,lat;
+    double lt, ltfract, ltint;
+    double ln, lnfract, lnint;
+    char dlt, dln;
+    short alt;
+    short angle;
+    short sat;
+    short speed;
+    
+    char sensorsdata[SERIALIZESENSORLEN];
+    bzero(sensorsdata, SERIALIZESENSORLEN);    
+    char sensorvaluebuffer[128];
+    int sensorscount = 0;
+    char packetdate[20];
+   
     char parr[100][100];
     int e,n;
    
@@ -98,49 +115,37 @@ startparce:
  }
 
 
-   bzero(query,MAXLENQUERY);
-   ret = sprintf(query,"SELECT id FROM devices WHERE (\"TelitImei\"='0%s');", parr[0]+1);
+ bzero(query,MAXLENQUERY);
+   ret = sprintf(query,"SELECT * FROM public.deviceauth('%s', '', '%s', %d, 10);", parr[0]+1, ip, dstport);
 
-   res = getexecsql(conn,query);
-   if(res){
-      if (PQgetisnull(res,0,0)){
+   res = getexecsql(conn, query);
+   if(res)
+   {
+      if (PQgetisnull(res,0,0))
+      {
          sprintf(id,"0");
          ifexit=1;
-         if(debug>1)syslog(LOG_ERR,"getexec sql id not found ");
-         } else {
+         if(debug>1)syslog(LOG_ERR,"getexec sql id not found %s", parr[0]+1);
+        } 
+         else 
+         {
             ret = sprintf(id,"%s",PQgetvalue(res, 0, 0));
             ifexit=0;
-         if(debug>1)syslog(LOG_ERR,"getexec sql found id=%s",id);
-         }
-         clearres(conn, res);
+            if(debug>1)syslog(LOG_ERR,"getexec sql found id=%s",id);
+         }         
    }
-
-   bzero(query,MAXLENQUERY);
-
-   ret = sprintf(query,"INSERT INTO log_login (imei, iccid, \"Assigned\", \"when\", ip, port) VALUES('0%s','11111','t',now(),'%s','%d');",
-                                          parr[0]+1, ip, dstport);
-
-   bzero(report,REPORTLEN);
-   ret = execsql(conn,query,report);
-   if(ret){
-      if(debug)syslog(LOG_WARNING,"can't insert log record errno %d(%s)", ret, report);
-      return;
-   }
-   if(debug>1)syslog(LOG_ERR,"insert log record errno %d(%s)", ret, report);
-
-   /*
-   bzero(argv[0], argv0size);
-   snprintf(argv[0], argv0size, "/usr/local/sbin/151-%s", id);
-   if(debug>1)syslog(LOG_ERR,"set new process name %s",argv[0]);
-   */
-   syslog(LOG_WARNING,"authpkt imei=0%s id=%s fromip=%s:%d",
+   clearres(conn, res);   
+        
+   syslog(LOG_WARNING,"authpkt imei=%s id=%s fromip=%s:%d",
                                parr[0]+1,   id,   ip,  dstport);
-   if (!ifexit){
+   if (!ifexit)
+   {
       goto insertcoordinates;
    }
 
    // simple say about unknown device
-   if(debug)syslog(LOG_WARNING,"unknown authpkt imei=%s id=%s fromip=%s:%d",
+   if(debug)
+     syslog(LOG_WARNING,"unknown authpkt imei=%s id=%s fromip=%s:%d",
                                                 parr[1],   id,   ip,  dstport);
    return;
 
@@ -162,27 +167,84 @@ Dec 11 17:59:02 localhost tr151-main: parr num=10 value=6
 Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
 */
 
+  
+  bzero(packetdate, 20);  
+  sprintf(packetdate, "20%c%c-%c%c-%c%c %c%c:%c%c:%c%c", parr[3][4],parr[3][5],parr[3][2],parr[3][3],parr[3][0],parr[3][1],parr[4][0],parr[4][1],parr[4][2],parr[4][3],parr[4][4],parr[4][5]);
 
-   bzero(query,MAXLENQUERY);
+  struct tm tm;
+  time_t epoch;
+  if (strptime(packetdate, "%Y-%m-%d %H:%M:%S", &tm) > 0 )
+  {
+    epoch = mktime(&tm);
+  }
+  else
+  {
+    syslog(LOG_ERR, "error parse date");
+    return;
+  }
+  
+  if(sscanf(parr[5]+1, "%lf", &lt) == 0)
+  {
+    syslog(LOG_ERR, "error parse lt");
+    return;
+  }
+  
+  if(sscanf(parr[6]+1, "%lf", &ln) == 0)
+  {
+    syslog(LOG_ERR, "error parse ln");
+    return;
+  }
+
+  bzero(query,MAXLENQUERY);
    ret = sprintf(query,
-    "INSERT INTO track (local_port,s_date,port,ip,id,w_date,y,x,speed,satelites,x_direct,y_direct,a1,a2,d1,d2,d3,d4)"\
-                     " VALUES('%s',now(),'%d','%s','%s','20%c%c-%c%c-%c%c %c%c:%c%c:%c%c','%s','%s',trunc('%s',0),'%s','%c','%c','0','0','f','f','f','f');",
-                        port,dstport,ip,id,
-                        parr[3][4],parr[3][5],parr[3][2],parr[3][3],parr[3][0],parr[3][1],
-                        parr[4][0],parr[4][1],parr[4][2],parr[4][3],parr[4][4],parr[4][5],
-                        parr[5]+1,parr[6]+1,parr[8],parr[10],parr[5][0],parr[6][0]);
-
+    "SELECT public.device17save(\
+    17::bigint,\
+    %s::bigint,\
+    %lu::bigint,\
+    %f::double precision,\
+    %f::double precision,\
+    %s::real,\
+    0::integer,\
+    0::smallint,\
+    0::smallint,\
+    %s::smallint,\
+    0::smallint,\
+    0::smallint,\
+    0::integer,\
+    0::bigint,\
+    ''::text,\
+    FALSE,\
+    ARRAY[0,0,%d%s]::double precision[],\
+    ARRAY[]::text[]\
+    );",
+                 id,                 
+                 (long)epoch,
+                 lt,
+                 ln,
+                 parr[8], 
+                 parr[10],  
+                 sensorscount,
+                 sensorsdata
+                );
 
    if(debug)syslog(LOG_ERR,"query: %s",query);
 
    bzero(report,REPORTLEN);
-   ret = execsql(conn,query,report);
-   if(ret){
-      if(debug)syslog(LOG_WARNING,"can't insert track record errno %d(%s)",ret,report);
-      if(debug>1)syslog(LOG_WARNING,"%s",query);
-      return;
+   
+   res = getexecsql(conn, query);
+   if(res)
+   {
+      if (PQgetisnull(res,0,0))
+      {
+            if(debug)syslog(LOG_WARNING,"can't insert track record errno %d(%s)",ret,report);
+            if(debug>1)syslog(LOG_WARNING,"%s",query);
+      }
+      else 
+      {            
+      }         
    }
-
+   clearres(conn, res); 
+     
    bzero(cmdtext,256);
    ret = sprintf(cmdtext,"$OK!");
    ret=write(1, cmdtext, strlen(cmdtext));
