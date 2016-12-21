@@ -18,6 +18,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
+#define __USE_XOPEN 
+#define _GNU_SOURCE
 #include <time.h>
 
 #include "../sockutils.h"
@@ -179,7 +181,7 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
   }
   else
   {
-    syslog(LOG_ERR, "error parse date");
+    syslog(LOG_ERR, "error parse date %s -> %s", parr[3], packetdate);
     return;
   }
   
