@@ -194,7 +194,7 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
   if (strptime(packetdate, "%Y-%m-%d %H:%M:%S", &tm) > 0 )
   {
     tzset();
-    epoch = mktime(&tm) - timezone;
+    epoch = mktime(&tm) + timezone;
   }
   else
   {
