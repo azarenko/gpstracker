@@ -208,13 +208,13 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
     return;
   }
   
-  if(sscanf(parr[5]+1, "%lf", &lt) == 0)
+  if(sscanf(parr[6]+1, "%lf", &lt) == 0)
   {
     syslog(LOG_ERR, "error parse lt");
     return;
   }
   
-  if(sscanf(parr[6]+1, "%lf", &ln) == 0)
+  if(sscanf(parr[5]+1, "%lf", &ln) == 0)
   {
     syslog(LOG_ERR, "error parse ln");
     return;
