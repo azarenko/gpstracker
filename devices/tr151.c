@@ -30,7 +30,7 @@
 #define POCKETMAXLEN    1500
 #define MAXCHIELDS      4096
 #define FD_COPY(f, t)   (void)(*(t) = *(f))
-#define INITPACKETLEN 17
+#define INITPACKETLEN 83
 #define SERIALIZESENSORLEN 2048
 
 void proto(const int* client_fd, PGconn *conn)
@@ -80,10 +80,20 @@ readstart:
 
    buflen = readfromsock(*client_fd, INITPACKETLEN, buf, betweentimeout * 1000);  
 
+   if(buf[buflen-1] != '!')
+   {
+	buflen += readfromsock(*client_fd, 100, buf, betweentimeout * 1000);  
+   }
+
+   if(buf[buflen-1] != '!')
+   {
+	syslog(LOG_ERR, "error read packet. Invalid terminate symbol '!' -> %d -> %s", buflen, buf);
+   }
+
    if(debug)syslog(LOG_WARNING, "read pocket length=%d childpid=%d",buflen, childpid);
 
    if(debug>2 && buflen){
-       if(debug)syslog(LOG_WARNING, "read %s",buf);
+       if(debug)syslog(LOG_WARNING, "read %s", buf);
    }
 
    if(!buflen){
@@ -103,16 +113,21 @@ startparce:
 
  bzero (parr,100*100);
  e=0; n=0;
- for(j=0;j<=buflen;j++){
-    if(buf[j]==0x2c){
+ for(j=0;j<=buflen;j++)
+{
+    if(buf[j]==0x2c)
+    {
        e++;
        n=0;
-    } else {
+    } 
+    else 
+    {
        parr[e][n++]=buf[j];
     }
  }
 
- for(j=0;j<=e;j++){
+ for(j=0;j<=e;j++)
+{
     syslog(LOG_ERR,"parr num=%d value=%s",j,parr[j]);
  }
 
