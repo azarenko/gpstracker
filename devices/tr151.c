@@ -148,7 +148,7 @@ startparce:
    // simple say about unknown device
    if(debug)
      syslog(LOG_WARNING,"unknown authpkt imei=%s id=%s fromip=%s:%d",
-                                                parr[1],   id,   ip,  dstport);
+                                                parr[0]+1,   id,   ip,  dstport);
    return;
 
 insertcoordinates:
