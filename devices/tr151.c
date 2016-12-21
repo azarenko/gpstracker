@@ -211,6 +211,10 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
     syslog(LOG_ERR, "error parse ln");
     return;
   }
+ 
+  /* normalize lt & ln */
+  lt /= 100.0;
+  ln /= 100.0;
 
   bzero(query,MAXLENQUERY);
    ret = sprintf(query,
