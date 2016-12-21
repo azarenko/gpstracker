@@ -81,9 +81,16 @@ readstart:
 
    buflen = readfromsock(*client_fd, INITPACKETLEN, buf, betweentimeout * 1000);  
 
-   if(buf[buflen-1] != '!')
+   for(int i=0; i < 30; i++)
    {
-	buflen += readfromsock(*client_fd, 100, buf + buflen, betweentimeout * 1000);  
+	   if(buf[buflen-1] != '!')
+	   {
+		buflen += readfromsock(*client_fd, 1, buf + buflen, betweentimeout * 1000);  
+	   }
+	   else
+	   {
+   	        break;
+	   }
    }
 
    if(buf[buflen-1] != '!')
@@ -194,7 +201,7 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
   if (strptime(packetdate, "%Y-%m-%d %H:%M:%S", &tm) > 0 )
   {
     tzset();
-    epoch = mktime(&tm) + timezone;
+    epoch = mktime(&tm) - timezone;
   }
   else
   {
