@@ -20,6 +20,7 @@
 #include <semaphore.h>
 #define __USE_XOPEN 
 #define _GNU_SOURCE
+#define _POSIX_SOURCE
 #include <time.h>
 
 #include "../sockutils.h"
@@ -183,8 +184,8 @@ Dec 11 17:59:02 localhost tr151-main: parr num=9 value=35.34
 Dec 11 17:59:02 localhost tr151-main: parr num=10 value=6
 Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
 */
-
   
+
   bzero(packetdate, 20);  
   sprintf(packetdate, "20%c%c-%c%c-%c%c %c%c:%c%c:%c%c", parr[3][4],parr[3][5],parr[3][2],parr[3][3],parr[3][0],parr[3][1],parr[4][0],parr[4][1],parr[4][2],parr[4][3],parr[4][4],parr[4][5]);
 
@@ -192,7 +193,8 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
   time_t epoch;
   if (strptime(packetdate, "%Y-%m-%d %H:%M:%S", &tm) > 0 )
   {
-    epoch = mktime(&tm);
+    tzset();
+    epoch = mktime(&tm) - timezone;
   }
   else
   {
