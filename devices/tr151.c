@@ -30,7 +30,7 @@
 #define POCKETMAXLEN    1500
 #define MAXCHIELDS      4096
 #define FD_COPY(f, t)   (void)(*(t) = *(f))
-#define INITPACKETLEN 83
+#define INITPACKETLEN 84
 #define SERIALIZESENSORLEN 2048
 
 void proto(const int* client_fd, PGconn *conn)
@@ -82,7 +82,7 @@ readstart:
 
    if(buf[buflen-1] != '!')
    {
-	buflen += readfromsock(*client_fd, 100, buf, betweentimeout * 1000);  
+	buflen += readfromsock(*client_fd, 100, buf + buflen, betweentimeout * 1000);  
    }
 
    if(buf[buflen-1] != '!')
