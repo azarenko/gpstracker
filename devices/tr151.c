@@ -20,7 +20,6 @@
 #include <semaphore.h>
 #define __USE_XOPEN 
 #define _GNU_SOURCE
-#define _POSIX_SOURCE
 #include <time.h>
 
 #include "../sockutils.h"
@@ -31,7 +30,7 @@
 #define POCKETMAXLEN    1500
 #define MAXCHIELDS      4096
 #define FD_COPY(f, t)   (void)(*(t) = *(f))
-#define INITPACKETLEN 84
+#define INITPACKETLEN 18
 #define SERIALIZESENSORLEN 2048
 
 void proto(const int* client_fd, PGconn *conn)
@@ -81,7 +80,7 @@ readstart:
 
    buflen = readfromsock(*client_fd, INITPACKETLEN, buf, betweentimeout * 1000);  
 
-   for(int i=0; i < 30; i++)
+   for(int i=0; i < 100; i++)
    {
 	   if(buf[buflen-1] != '!')
 	   {
