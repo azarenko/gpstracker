@@ -221,8 +221,13 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
   }
  
   /* normalize lt & ln */
-  lt /= 100.0;
-  ln /= 100.0;
+  double lt_dd, lt_mm, ln_dd, ln_mm, nlt, nln;
+
+  lt_mm = modf((lt / 100.0), &lt_dd);
+  nlt = lt_dd + ((lt_mm * 100.0) / 60.0);
+
+  ln_mm = modf((ln / 100.0), &ln_dd);
+  nln = ln_dd + ((ln_mm * 100.0) / 60.0);	
 
   bzero(query,MAXLENQUERY);
    ret = sprintf(query,
@@ -248,8 +253,8 @@ Dec 11 17:59:02 localhost tr151-main: parr num=11 value=1.48!
     );",
                  id,                 
                  (long)epoch,
-                 lt,
-                 ln,
+                 nlt,
+                 nln,
                  parr[8], 
                  parr[10],  
                  sensorscount,
