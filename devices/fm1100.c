@@ -530,7 +530,7 @@ nextframe:
     %f::real,\
     %d::integer,\
     %d::smallint,\
-    0::smallint,\
+    %d::smallint,\
     %d::smallint,\
     0::smallint,\
     0::smallint,\
@@ -548,7 +548,8 @@ nextframe:
                  speed/1.852, 
                  priority,
                  alt,
-                 sat,                 
+                 sat,
+		 angle,                 
                  batlvl,
                  sensorscount,
                  sensorsdata
