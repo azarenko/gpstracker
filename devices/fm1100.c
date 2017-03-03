@@ -548,8 +548,8 @@ nextframe:
                  speed/1.852, 
                  priority,
                  alt,
-                 sat,
 		 angle,                 
+                 sat,
                  batlvl,
                  sensorscount,
                  sensorsdata
