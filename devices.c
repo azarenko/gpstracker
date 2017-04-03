@@ -1,3 +1,6 @@
+#define _GNU_SOURCE
+#include <errno.h>
+
 #include "devices.h"
 
 #define MAXLENQUERY     2048
@@ -42,6 +45,11 @@ int db_login(PGconn **conn)
     pthread_mutex_lock(&connectionm);
     if (PQstatus(*conn) == CONNECTION_BAD) 
     {
+        char appnameenv[1024];
+	bzero(appnameenv,1024);
+	sprintf(appnameenv, "%s=%s", "PGAPPNAME", program_invocation_short_name);
+	putenv(appnameenv);
+      
         char *pgoptions=NULL, *pgtty=NULL;
         *conn = PQsetdbLogin(primarypghost, primarypgport, pgoptions, pgtty, primarydbname, primarypglogin, primarypgpwd);
         if (PQstatus(*conn) == CONNECTION_BAD) 
